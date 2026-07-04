@@ -68,7 +68,8 @@ class PushReceiver:
         self.time_last_message_received = time.time()
 
     def __del__(self):
-        self.checkin_thread.cancel()
+        if self.checkin_thread:
+            self.checkin_thread.cancel()
         self.__close_socket()
 
     def __read(self, size):
