@@ -75,7 +75,10 @@ class PushReceiver:
     def __read(self, size):
         buf = b''
         while len(buf) < size:
-            buf += self.socket.recv(size - len(buf))
+            chunk = self.socket.recv(size - len(buf))
+            if not chunk:
+                raise ConnectionResetError("socket closed by server")
+            buf += chunk
         return buf
 
     # protobuf variable length integers are encoded in base 128
